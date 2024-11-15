@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations;
 using aMessage.Domain;
 using aMessage.Domain.Authentication.Services;
 
@@ -22,19 +23,13 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-var summaries = new[]
+app.MapPost("/register", async (string userName, string email, string password,IAuthenticationService authService) =>
 {
-    "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-};
-
-app.MapPost("/register", async (string userName, string email, string password,IUserService userService) =>
+    return await authService.Register(userName, email, password);
+}).WithOpenApi();
+app.MapPost("/login", async (string email, string password, IAuthenticationService authService) =>
 {
-    return await userService.Register(userName, email, password);
+    return await authService.Login(email, password);
 }).WithOpenApi();
 
 app.Run();
-
-record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
-{
-    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
-}

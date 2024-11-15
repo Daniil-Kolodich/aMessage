@@ -9,7 +9,7 @@ public static class DomainAssembly
 {
     public static void ConfigureServices(IServiceCollection services)
     {
-        services.AddScoped<IUserService, UserService>();
+        services.AddScoped<IAuthenticationService, AuthenticationService>();
 
         DatabaseAssembly.ConfigureServices(services);
     }
