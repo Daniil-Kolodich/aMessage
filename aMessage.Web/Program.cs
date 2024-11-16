@@ -1,7 +1,6 @@
-using System.ComponentModel.DataAnnotations;
 using System.Text;
+using System.Text.Json.Serialization;
 using aMessage.Domain;
-using aMessage.Domain.Authentication.Services;
 using aMessage.Domain.Shared;
 using aMessage.Web.Configurations;
 using aMessage.Web.Helpers;
@@ -14,6 +13,11 @@ var builder = WebApplication.CreateBuilder(args);
 
 DomainAssembly.ConfigureServices(builder.Services);
 
+builder.Services.AddControllers().AddJsonOptions(options =>
+{
+    options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+    options.JsonSerializerOptions.WriteIndented = true;
+});
 builder.Services.Configure<JwtConfiguration>(builder.Configuration.GetSection(nameof(JwtConfiguration)));
 builder.Services.AddScoped<IJwtHelper, JwtHelper>();
 builder.Services.AddScoped<IIdentityService, IdentityService>();
@@ -78,45 +82,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.MapControllers();
 app.UseAuthentication();
 app.UseAuthorization();
 app.UseHttpsRedirection();
-
-app.MapPost("/register", async (
-        string userName, 
-        string email, 
-        string password,
-        IAuthenticationService authService,
-        IJwtHelper jwtHelper) =>
-{
-    var user = await authService.Register(userName, email, password);
-    var token = jwtHelper.GenerateToken(user.Id);    
-    return new
-    {
-        User = user,
-        JWT = token
-    };
-}).AllowAnonymous().WithOpenApi();
-app.MapPost("/login", async (
-    string email,
-    string password,
-    IAuthenticationService authService,
-    IJwtHelper jwtHelper) =>
-{
-    var user = await authService.Login(email, password);
-    var token = jwtHelper.GenerateToken(user.Id);    
-    return new
-    {
-        User = user,
-        JWT = token
-    };
-}).AllowAnonymous()
-    .WithOpenApi();
-
-app.MapGet("/hello", (IIdentityService identityService) =>
-    {
-        return $"Hello user with id {identityService.UserId}";
-    }
-).RequireAuthorization();
-
 app.Run();

@@ -10,4 +10,7 @@ public class User : Entity
     public string Email { get; set; }
     [Required]
     public string Password { get; set; }
+    
+    public IEnumerable<Chat> Chats { get; set; }
+    public IEnumerable<Message> Messages { get; set; }
 }

@@ -9,4 +9,5 @@ public interface IUserRepository
     Task<User?> UpdateUser(int id, string? userName = null, string? email = null, string? password = null);
     Task<User?> FindUser(string email, string password);
     Task<bool> DeleteUser(int id);
+    Task<IEnumerable<User>> FindUser(string partialName);
 }

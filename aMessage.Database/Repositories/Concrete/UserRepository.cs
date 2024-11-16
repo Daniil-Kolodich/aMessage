@@ -12,6 +12,15 @@ public class UserRepository : IUserRepository
         _context = context;
     }
 
+    public async Task<IEnumerable<User>> FindUser(string partialName)
+    {
+        return await _context.Users
+            .AsNoTracking()
+            .Where(u => u.Username.Contains(partialName))
+            .ToListAsync();
+    }
+
+
     public async Task<User?> CreateUser(string userName, string email, string password)
     {
         var user = (await _context.Users.AddAsync(new User

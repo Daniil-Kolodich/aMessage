@@ -12,5 +12,7 @@ public static class DatabaseAssembly
         services.AddDbContext<DatabaseContext>(
             o => o.UseSqlServer("Server=DESKTOP-D0G448O;Database=LocalDB;Trusted_Connection=SSPI;MultipleActiveResultSets=true;TrustServerCertificate=true"));
         services.AddScoped<IUserRepository, UserRepository>();
+        services.AddScoped<IChatRepository, ChatRepository>();
+        services.AddScoped<IMessageRepository, MessageRepository>();
     }
 }
