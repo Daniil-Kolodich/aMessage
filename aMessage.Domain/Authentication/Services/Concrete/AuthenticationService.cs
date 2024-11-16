@@ -1,4 +1,5 @@
 ﻿using aMessage.Database.Repositories;
+using aMessage.Domain.Authentication.Helpers;
 using aMessage.Domain.Authentication.Models;
 
 namespace aMessage.Domain.Authentication.Services.Concrete;
@@ -7,7 +8,7 @@ public class AuthenticationService(IUserRepository userRepository) : IAuthentica
 {
     public async Task<UserResponse?> Register(string userName, string email, string password)
     {
-        var user = await userRepository.CreateUser(userName, email, password);
+        var user = await userRepository.CreateUser(userName, email, PasswordHelper.HashPassword(password));
 
         if (user is null)
             return null;
@@ -17,7 +18,7 @@ public class AuthenticationService(IUserRepository userRepository) : IAuthentica
 
     public async Task<UserResponse?> Login(string email, string password)
     {
-        var user = await userRepository.FindUser(email, password);
+        var user = await userRepository.FindUser(email, PasswordHelper.HashPassword(password));
 
         if (user is null)
             return null;
