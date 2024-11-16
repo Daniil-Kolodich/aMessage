@@ -2,15 +2,8 @@
   "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
   "version": 1,
   "newProjectRoot": "projects",
-  "schematics": {
-    "@schematics/angular": {
-      "component": {
-        "spec": false
-      }
-    }
-  },
   "projects": {
-    "aMessage.Angular": {
+    "aMessage": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -75,10 +68,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "aMessage.Angular:build:production"
+              "buildTarget": "aMessage:build:production"
             },
             "development": {
-              "buildTarget": "aMessage.Angular:build:development"
+              "buildTarget": "aMessage:build:development"
             }
           },
           "defaultConfiguration": "development"
